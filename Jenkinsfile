@@ -26,6 +26,9 @@ pipeline{
                     }
                     steps {
                         script{
+                                sh """go get gopkg.in/yaml.v2"""
+                                sh """go get github.com/pkg/errors"""
+                                sh """go get github.com/cjburchell/docker-compose"""
                                 sh """go vet ./..."""
 
                                 def checkVet = scanForIssues tool: [$class: 'GoVet']
