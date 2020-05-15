@@ -21,6 +21,7 @@ type endpoint struct {
 	customRequestHandler func(string, string, string)
 }
 
+//IEndpoint interface
 type IEndpoint interface {
 	RequestHandler(handler func(string, string, string)) IEndpoint
 	Reply(handler func(IReply)) IEndpoint

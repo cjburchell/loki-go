@@ -8,6 +8,7 @@ import (
 	log "github.com/cjburchell/uatu-go"
 )
 
+// IReply interface
 type IReply interface {
 	Body(body interface{}, logger log.ILog) IReply
 	Content(content string) IReply

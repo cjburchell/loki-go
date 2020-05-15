@@ -5,17 +5,18 @@ import (
 	"os"
 	"time"
 
-	docker_compose "github.com/cjburchell/docker-compose"
+	dockerCompose "github.com/cjburchell/docker-compose"
 	log "github.com/cjburchell/uatu-go"
 )
 
 type system struct {
-	docker_compose.IContainers
+	dockerCompose.IContainers
 	mockedServers   []*server
 	composeFilePath string
 	log             log.ILog
 }
 
+// ISystem interface
 type ISystem interface {
 	End()
 }
@@ -39,8 +40,9 @@ func (system *system) End() {
 	}
 }
 
-func StartSystem(path, composeFile string, services map[string]docker_compose.Service, mocked []IServer, log log.ILog, systemLogs bool) (ISystem, error) {
-	file := docker_compose.File{
+// StartSystem starts the mock system
+func StartSystem(path, composeFile string, services map[string]dockerCompose.Service, mocked []IServer, log log.ILog, systemLogs bool) (ISystem, error) {
+	file := dockerCompose.File{
 		Version:  "2.2",
 		Services: services,
 	}
@@ -67,7 +69,7 @@ func StartSystem(path, composeFile string, services map[string]docker_compose.Se
 		return nil, err
 	}
 
-	compose := docker_compose.CreateFile(composeFilePath)
+	compose := dockerCompose.CreateFile(composeFilePath)
 
 	log.Printf("Starting up %s", composeFilePath)
 	if err := compose.Up(); err != nil {

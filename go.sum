@@ -4,8 +4,8 @@ github.com/cjburchell/settings-go v1.1.15 h1:ecdUCxdoQCbbxJO1l/PpvmUzQzDcJcZOOMB
 github.com/cjburchell/settings-go v1.1.15/go.mod h1:9o325q7tR3br/nNdeYLYFMx8McAy/TWSA9TxsIDGrAU=
 github.com/cjburchell/tools-go v1.0.1 h1:wUU98dkn2cwnXiWfONlHe7pn/9Mzuc8TIJ6GVeqYXDs=
 github.com/cjburchell/tools-go v1.0.1/go.mod h1:jDc6wyeVOBbPhx7Wx9H8GBjIR2XIF8BaYl6Ehx17hQ8=
-github.com/cjburchell/uatu-go v1.1.9 h1:Q6+nuhgimawjtpmXQK1j8uOzwLnupaRX7tLAJiSgU6o=
-github.com/cjburchell/uatu-go v1.1.9/go.mod h1:oegEXxMarhQPEKaC3LNZvkoGD3xzc6mqdV+jfHsk5j0=
+github.com/cjburchell/uatu-go v1.1.11 h1:lOFfDno7bvyE/uaTen/gkRghRLFziNiheABi9LYxsps=
+github.com/cjburchell/uatu-go v1.1.11/go.mod h1:oegEXxMarhQPEKaC3LNZvkoGD3xzc6mqdV+jfHsk5j0=
 github.com/davecgh/go-spew v1.1.0/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
 github.com/golang/protobuf v1.3.5/go.mod h1:6O5/vntMXwX2lRkT1hjjk0nAC1IDOTvTlVgjlRvqsdk=
 github.com/golang/protobuf v1.4.0-rc.1/go.mod h1:ceaxUfeHdC40wWswd/P6IGgMaK3YpKi5j83Wpe3EHw8=

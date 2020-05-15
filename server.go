@@ -20,6 +20,7 @@ type server struct {
 	log        log.ILog
 }
 
+// IServer interface
 type IServer interface {
 	Endpoint(name string, method string, path string) IEndpoint
 }
@@ -31,6 +32,7 @@ type request struct {
 	Endpoint    string `json:"endpoint"`
 }
 
+// CreateServer creates the server
 func CreateServer(name string, log log.ILog) IServer {
 	return &server{name: name, log: log}
 }
@@ -46,11 +48,11 @@ func (server *server) Write(p []byte) (n int, err error) {
 			pos := index + len(requestStart) - 1
 
 			server.log.Debugf("%d", pos)
-			requestJsonString := data[pos:]
-			server.log.Debugf("%s", requestJsonString)
+			requestJSONString := data[pos:]
+			server.log.Debugf("%s", requestJSONString)
 
 			var requestObject = request{}
-			err := json.Unmarshal([]byte(requestJsonString), &requestObject)
+			err := json.Unmarshal([]byte(requestJSONString), &requestObject)
 			if err != nil {
 				server.log.Error(err)
 				return len(p), nil
