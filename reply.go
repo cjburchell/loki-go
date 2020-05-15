@@ -4,10 +4,12 @@ import (
 	"encoding/json"
 	"encoding/xml"
 	"strings"
+
+	log "github.com/cjburchell/uatu-go"
 )
 
 type IReply interface {
-	Body(body interface{}, logger ILog) IReply
+	Body(body interface{}, logger log.ILog) IReply
 	Content(content string) IReply
 	Code(code int) IReply
 	Header(key, value string) IReply
@@ -19,7 +21,7 @@ type reply struct {
 	config *endpointConfig
 }
 
-func (reply *reply) Body(body interface{}, logger ILog) IReply {
+func (reply *reply) Body(body interface{}, logger log.ILog) IReply {
 	if strings.Contains(reply.config.ContentType, "xml") {
 		bodyString, err := xml.Marshal(body)
 		if err != nil {

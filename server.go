@@ -7,7 +7,9 @@ import (
 	"os"
 	"strings"
 
-	docker_compose "github.com/cjburchell/docker-compose"
+	log "github.com/cjburchell/uatu-go"
+
+	dockerCompose "github.com/cjburchell/docker-compose"
 	"github.com/pkg/errors"
 )
 
@@ -15,7 +17,7 @@ type server struct {
 	name       string
 	configFile string
 	endpoints  map[string]*endpoint
-	log        ILog
+	log        log.ILog
 }
 
 type IServer interface {
@@ -29,7 +31,7 @@ type request struct {
 	Endpoint    string `json:"endpoint"`
 }
 
-func CreateServer(name string, log ILog) IServer {
+func CreateServer(name string, log log.ILog) IServer {
 	return &server{name: name, log: log}
 }
 
@@ -67,9 +69,9 @@ func (server *server) Write(p []byte) (n int, err error) {
 	return len(p), nil
 }
 
-func (server *server) BuildComposeService(path string) (docker_compose.Service, error) {
+func (server *server) BuildComposeService(path string) (dockerCompose.Service, error) {
 	var filename, err = server.SaveMockFile(path)
-	return docker_compose.Service{
+	return dockerCompose.Service{
 		Image:   "cjburchell/loki:latest",
 		Volumes: []string{fmt.Sprintf("./%s:/mock/%s", filename, filename)},
 		Environment: []string{
@@ -112,6 +114,6 @@ func (server *server) Endpoint(name string, method string, path string) IEndpoin
 	return newEndpoint
 }
 
-func (server *server) AttachToLogs(containers docker_compose.IContainers) error {
+func (server *server) AttachToLogs(containers dockerCompose.IContainers) error {
 	return containers.LogServiceWithHandler(server.name, server)
 }

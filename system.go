@@ -6,13 +6,14 @@ import (
 	"time"
 
 	docker_compose "github.com/cjburchell/docker-compose"
+	log "github.com/cjburchell/uatu-go"
 )
 
 type system struct {
 	docker_compose.IContainers
 	mockedServers   []*server
 	composeFilePath string
-	log             ILog
+	log             log.ILog
 }
 
 type ISystem interface {
@@ -38,7 +39,7 @@ func (system *system) End() {
 	}
 }
 
-func StartSystem(path, composeFile string, services map[string]docker_compose.Service, mocked []IServer, log ILog, systemLogs bool) (ISystem, error) {
+func StartSystem(path, composeFile string, services map[string]docker_compose.Service, mocked []IServer, log log.ILog, systemLogs bool) (ISystem, error) {
 	file := docker_compose.File{
 		Version:  "2.2",
 		Services: services,
