@@ -77,8 +77,8 @@ func (server *server) BuildComposeService(path string) (dockerCompose.Service, e
 		Image:   "cjburchell/loki:latest",
 		Volumes: []string{fmt.Sprintf("./%s:/mock/%s", filename, filename)},
 		Environment: []string{
-			fmt.Sprintf("CONFIG_FILE=/mock/%s", filename),
-			fmt.Sprintf("SERVER_NAME=%s", server.name),
+			fmt.Sprintf("ConfigFile=/mock/%s", filename),
+			fmt.Sprintf("ServerName=%s", server.name),
 		},
 	}, err
 }
