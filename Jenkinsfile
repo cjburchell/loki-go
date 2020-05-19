@@ -3,11 +3,12 @@ pipeline{
     environment {
             PROJECT_PATH = "/go/src/github.com/cjburchell/loki-go"
             VERSION = "v1.1.${env.BUILD_NUMBER}"
+            PRE_RELEASE_VERSION = "{env.VERSION}-${env.BRANCH_NAME}"
             repository = "github.com/cjburchell/loki-go.git"
     }
 
     parameters {
-            booleanParam(name: 'Release', defaultValue: false, description: 'Should tag release?')
+             booleanParam(name: 'PreRelease', defaultValue: false, description: 'Should tag release?')
         }
 
     stages {
@@ -58,8 +59,20 @@ pipeline{
                 }
             }
         }
-        stage('Release') {
-            when { expression { params.Release } }
+        stage('Tag Pre Release') {
+            when { expression { params.PreRelease } }
+            steps {
+                 script {
+                    withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'github', usernameVariable: 'GIT_USERNAME', passwordVariable: 'GIT_PASSWORD']]) {
+                        sh """git tag ${PRE_RELEASE_VERSION}"""
+                        sh """git push https://${env.GIT_USERNAME}:${env.GIT_PASSWORD}@${env.repository} ${PRE_RELEASE_VERSION}"""
+                    }
+
+                }
+            }
+        }
+        stage('Tag Release') {
+            when { expression { env.BRANCH_NAME == "master" } }
             steps {
                  script {
                     withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'github', usernameVariable: 'GIT_USERNAME', passwordVariable: 'GIT_PASSWORD']]) {
