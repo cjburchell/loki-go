@@ -33,7 +33,7 @@ func (system *system) End() {
 	}
 
 	for _, server := range system.mockedServers {
-		err = server.Stop()
+		err = server.stop()
 		if err != nil {
 			system.log.Error(err)
 		}
@@ -59,7 +59,7 @@ func StartSystem(path, composeFile string, services map[string]dockerCompose.Ser
 
 	var err error
 	for _, mockedServer := range mockedServers {
-		file.Services[mockedServer.name], err = mockedServer.BuildComposeService(path)
+		file.Services[mockedServer.name], err = mockedServer.buildComposeService(path)
 		if err != nil {
 			return nil, err
 		}
@@ -102,7 +102,7 @@ func StartSystem(path, composeFile string, services map[string]dockerCompose.Ser
 	}
 
 	for _, servers := range mockedServers {
-		err := servers.AttachToLogs(compose)
+		err := servers.attachToLogs(compose)
 		if err != nil {
 			log.Error(err)
 		}

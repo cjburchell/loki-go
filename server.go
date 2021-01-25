@@ -18,6 +18,7 @@ type server struct {
 	configFile string
 	endpoints  map[string]*endpoint
 	log        log.ILog
+	image      string
 }
 
 // IServer interface
@@ -33,11 +34,11 @@ type request struct {
 }
 
 // CreateServer creates the server
-func CreateServer(name string, log log.ILog) IServer {
-	return &server{name: name, log: log}
+func CreateServer(name, image string, log log.ILog) IServer {
+	return &server{name: name, image:image, log: log}
 }
 
-func (server *server) Write(p []byte) (n int, err error) {
+func (server *server) write(p []byte) (n int, err error) {
 	requestStart := "Request:{"
 
 	lines := strings.Split(string(p), string([]byte{27}))
@@ -71,10 +72,10 @@ func (server *server) Write(p []byte) (n int, err error) {
 	return len(p), nil
 }
 
-func (server *server) BuildComposeService(path string) (dockerCompose.Service, error) {
-	var filename, err = server.SaveMockFile(path)
+func (server *server) buildComposeService(path string) (dockerCompose.Service, error) {
+	var filename, err = server.saveMockFile(path)
 	return dockerCompose.Service{
-		Image:   "cjburchell/loki:latest",
+		Image:   server.image,
 		Volumes: []string{fmt.Sprintf("./%s:/mock/%s", filename, filename)},
 		Environment: []string{
 			fmt.Sprintf("ConfigFile=/mock/%s", filename),
@@ -83,11 +84,11 @@ func (server *server) BuildComposeService(path string) (dockerCompose.Service, e
 	}, err
 }
 
-func (server *server) Stop() error {
+func (server *server) stop() error {
 	return os.Remove(server.configFile)
 }
 
-func (server *server) SaveMockFile(path string) (string, error) {
+func (server *server) saveMockFile(path string) (string, error) {
 	var fileObject = map[string]endpointConfig{}
 
 	for name, endpoint := range server.endpoints {
@@ -116,6 +117,6 @@ func (server *server) Endpoint(name string, method string, path string) IEndpoin
 	return newEndpoint
 }
 
-func (server *server) AttachToLogs(containers dockerCompose.IContainers) error {
+func (server *server) attachToLogs(containers dockerCompose.IContainers) error {
 	return containers.LogServiceWithHandler(server.name, server)
 }

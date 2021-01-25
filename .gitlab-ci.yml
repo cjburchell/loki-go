@@ -1,0 +1,32 @@
+image: golang:1.14
+
+before_script:
+  - export GO_PROJECT_PATH="$GOPATH/src/github.com/$CI_PROJECT_NAMESPACE"
+  - echo $GO_PROJECT_PATH
+  - mkdir -p $GO_PROJECT_PATH
+  - ln -s $(pwd) $GO_PROJECT_PATH
+  - export GO_PROJECT_PATH="$GO_PROJECT_PATH/$CI_PROJECT_NAME"
+  - echo $GO_PROJECT_PATH
+  - cd $GO_PROJECT_PATH
+
+stages:
+  - style
+  - test
+
+go-vet:
+  stage: style
+  script:
+    - go fmt $(go list ./... | grep -v /vendor/)
+    - go vet $(go list ./... | grep -v /vendor/)
+
+go-lint:
+  stage: style
+  before_script:
+    - go get -u golang.org/x/lint/golint/...
+  script:
+    - out=$(golint $(go list ./... | grep -v "vendor"))
+    - if [ "$out" ]; then echo "$out"; exit 1; fi
+
+include:
+  - template: Security/License-Scanning.gitlab-ci.yml
+  - template: Dependency-Scanning.gitlab-ci.yml
