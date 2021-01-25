@@ -118,5 +118,5 @@ func (server *server) Endpoint(name string, method string, path string) IEndpoin
 }
 
 func (server *server) attachToLogs(containers dockerCompose.IContainers) error {
-	return containers.LogServiceWithHandler(server.name, server)
+	return containers.LogService(server.name)
 }
